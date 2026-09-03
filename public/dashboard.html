@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <script src="/config.js"></script>
+  </head>
+  <body>
+    <main class="card">
+      <p class="eyebrow">Acme Dashboard</p>
+      <h1>Your workspace</h1>
+      <p id="status" class="muted">Loading session…</p>
+      <pre id="profile" hidden></pre>
+      <p>
+        <a href="/">Back home</a>
+      </p>
+    </main>
+    <script>
+      const statusEl = document.getElementById("status")
+      const profileEl = document.getElementById("profile")
+      const authToken = sessionStorage.getItem("authToken")
+
+      async function loadProfile() {
+        if (!authToken) {
+          statusEl.textContent =
+            "No session token. Sign in again from the home page."
+          return
+        }
+
+        const response = await fetch(window.APP_CONFIG.authUrl + "/api/me", {
+          headers: { Authorization: "Bearer " + authToken },
+        })
+        const data = await response.json()
+
+        if (!response.ok) {
+          statusEl.textContent =
+            "Could not load the current user. The token in the URL was likely truncated."
+          profileEl.hidden = false
+          profileEl.textContent = JSON.stringify(
+            {
+              error: data.error,
+              tokenLength: authToken.length,
+              tokenPreview: authToken.slice(0, 80) + "…",
+            },
+            null,
+            2,
+          )
+          return
+        }
+
+        statusEl.textContent = "Signed in as " + data.user.email
+        profileEl.hidden = false
+        profileEl.textContent = JSON.stringify({ user: data.user }, null, 2)
+      }
+
+      loadProfile()
+    </script>
+  </body>
+</html>

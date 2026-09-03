@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Acme Dashboard</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <script src="/config.js"></script>
+  </head>
+  <body>
+    <main class="card">
+      <p class="eyebrow">Acme Dashboard</p>
+      <h1>Welcome back</h1>
+      <p class="muted">
+        Sign in sends a GET to the backend login endpoint. The backend then
+        redirects to <code>/authenticated</code> with a JWT in the query string.
+      </p>
+      <p>
+        <a id="sign-in" class="button" href="#">Sign in</a>
+      </p>
+    </main>
+    <script>
+      document.getElementById("sign-in").href =
+        window.APP_CONFIG.authUrl + "/login"
+    </script>
+  </body>
+</html>
