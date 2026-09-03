@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Authenticating</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="card">
+      <p class="eyebrow">Acme Dashboard</p>
+      <h1>Finishing sign in</h1>
+      <p id="status" class="muted">Reading session from the URL…</p>
+    </main>
+    <script>
+      const params = new URLSearchParams(window.location.search)
+      const authToken = params.get("authToken")
+      const statusEl = document.getElementById("status")
+
+      if (!authToken) {
+        statusEl.textContent =
+          "No authToken query parameter. The redirect URL was probably truncated."
+      } else {
+        sessionStorage.setItem("authToken", authToken)
+        window.location.replace("/dashboard")
+      }
+    </script>
+  </body>
+</html>
